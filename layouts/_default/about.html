@@ -1,0 +1,109 @@
+{{ define "body-class" }}template-about{{ end }}
+{{ define "main" }}
+{{ partial "banner" . }} 
+<div class="about no-copy">
+    <div class="Me">
+        <div class="aboutMe card">
+            <span class="img">
+                <img src="/images/Me.png" alt="">
+            </span>
+            <span class="introduction">
+                <h3>关于我</h3>
+                <div class="content">
+                    {{ .Content }}
+                </div>
+            </span>
+        </div>
+        <div class="personalities card">
+            <p class="INTP">
+                <div class="title">
+                    <p>INTP-T</p>
+                    <p>逻辑学家</p>
+                </div>
+                <div class="img">
+                    <img src="/images/mbti/INTP.svg" alt="">
+                </div>
+            </p>
+        </div>
+    </div>
+    <div class="interest card">
+        <h3>我的兴趣</h3>
+        <div class="interest-content">
+            <span><strong style="color: #4298B4;">折腾</strong>属性爆炸</span>
+            <span>沉迷<strong style="color: #E4AE3A;">朋克</strong>音乐</span>
+            <span><strong style="color: #B04FE6;">软件&工具</strong>爱好者</span>
+            <span><strong style="color: #33A474;">都市传说</strong>真有趣</span>
+            <span>感觉自己<strong style="color: #F25E62;">爱读书</strong></span>
+        </div>
+    </div>
+    <div class="aboutSite">
+        <div class="about-site card">
+            <h3>关于本站</h3>
+            <div class="about-site-content">
+                <div>
+                    <span class="emoji">💻</span>
+                    <span class="title">网站搭建：</span>
+                    <span class="content">
+                        <a href="https://gohugo.io/" target="_blank"><strong>Hugo</strong></a>
+                    </span>
+                </div>
+                <div>
+                    <span class="emoji">🎨</span>
+                    <span class="title">博客主题：</span>
+                    <span class="content">
+                        魔改自<a href="https://stack.jimmycai.com/" target="_blank"><strong>Stack</strong></a>主题
+                    </span>
+                </div>
+                <div>
+                    <span class="emoji">🖥</span>
+                    <span class="title">网站部署：</span>
+                    <span class="content">阿里云ECS</span>
+                </div>
+                <div>
+                    <span class="emoji">✍</span>
+                    <span class="title">文章创作：</span>
+                    <span class="content">
+                        使用<a href="https://obsidian.md/" target="_blank"><strong>Obsidian</strong></a>创作并发布
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div id="statistic"class="statistic card">
+            <h3>数据统计</h3>
+            <div class="content"></div>
+            <div class="link"><a target="_blank" title="51la网站统计" href="https://v6.51.la/land/3Hs6RXBn6bsKkvZB"><img src="https://sdk.51.la/icon/1-1.png"></a></div>
+            <div class="bgimg">
+                <img src="/images/bgimg.jpg" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="event card no-copy">
+    <h3>博客大事记</h3>
+    <section class="timeline">
+        <ol>
+            {{ range $event := .Params.event }}
+            <li>
+                <div>
+                <time>{{ $event.date }}</time>{{ $event.content }}
+                </div>
+            </li>
+            {{ end }}
+        </ol>
+    </section>
+</div>
+{{ if not (eq .Params.comments false) }}
+{{ partial "comments/include" . }}
+{{ end }}
+
+
+<!-- js -->
+<script>
+fetch('{{ .Site.Params.statistics }}').then(res => res.text()).then((data) => {
+    let title = ['最近活跃访客', '今日人数', '今日访问', '昨日人数', '昨日访问', '本月访问', '总访问量']
+    let num = data.match(/(?<=<\/span><span>).*?(?=<\/span><\/p>)/g)
+    let order = [1, 3, 2, 4, 5]
+    for (let i = 0; i < order.length; i++) { document.querySelectorAll('#statistic .content')[0].innerHTML += '<div><span class="name">' + title[order[i]] + '</span><span class="num">' + num[order[i]] + '</span></div>' }
+});
+</script>
+{{ end }}

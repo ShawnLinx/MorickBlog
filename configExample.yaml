@@ -1,0 +1,146 @@
+# 使用前修改此文件名——config.yaml
+
+baseurl: https://www.morick66.com/
+languageCode: zh-cn
+theme: 
+paginate: 10
+title: Morick莫里克
+copyright: Morick莫里克
+
+# Theme i18n support
+# Available values: ar, bn, ca, de, el, en, es, fr, hu, id, it, ja, ko, nl, pt-br, th, uk, zh-cn, zh-hk, zh-tw
+DefaultContentLanguage: zh-cn
+
+# Set hasCJKLanguage to true if DefaultContentLanguage is in [zh-cn ja ko]
+# This will make .Summary and .WordCount behave correctly for CJK languages.
+hasCJKLanguage: true
+
+services:
+  # GA Tracking ID
+  googleAnalytics:
+    id:
+
+permalinks:
+  post: /p/:slug/
+  page: /:slug/
+
+params:
+  mainSections:
+    - post
+  featuredImageField: image
+  rssFullContent: true
+  favicon: /favicon.ico
+  info:
+    avatar: /images/Morick.jpg
+    title: Morick莫里克
+    subtitle: 假装自己是个外星人
+    github: https://github.com/Morick66
+    email: morick655@163.com
+    notice: Hello！我叫Morick莫里克，欢迎光顾我的博客🎉
+  navbar:
+    title: Morick
+
+  footer:
+    since: 2024
+    customText:
+    startTime: 03/19/2024 00:00:00   # Website start time
+    icp:
+      enabled: true
+      icpnum: 
+      icplink: 
+
+  dateFormat:
+    published: Jan 02, 2006
+    lastUpdated: Jan 02, 2006 15:04 MST
+
+  article:
+    math: false
+    toc: true
+    license:
+      enabled: true
+      default: Licensed under CC BY-NC-SA 4.0
+
+  comments:
+    enabled: true
+    provider: twikoo
+
+    twikoo:
+        envId: 
+        region: ap-beijing
+        path: 
+        lang: zh-cn
+
+  opengraph:
+    twitter:
+      # Your Twitter username
+      site:
+
+      # Available values: summary, summary_large_image
+      card: summary_large_image
+
+  defaultImage:
+    opengraph:
+      enabled: false
+      local: false
+      src: 
+
+  colorScheme:
+    # Display toggle
+    toggle: true
+
+    # Available values: auto, light, dark
+    default: light
+
+  imageProcessing:
+    cover:
+      enabled: true
+    content:
+      enabled: true
+  
+  ### 51LA统计脚本
+  statistics: 
+
+menu:
+  main: []
+
+related:
+  includeNewer: true
+  threshold: 60
+  toLower: false
+  indices:
+    - name: tags
+      weight: 100
+    - name: categories
+      weight: 200
+
+markup:
+  goldmark:
+    renderer:
+      ## Set to true if you have HTML content inside Markdown
+      unsafe: true
+  tableOfContents:
+    endLevel: 4
+    ordered: true
+    startLevel: 2
+  highlight:
+    noClasses: false
+    codeFences: true
+    guessSyntax: true
+    lineNoStart: 1
+    lineNos: false
+    lineNumbersInTable: true
+    tabWidth: 4
+
+outputs:
+  home:
+    - HTML
+    - randomJSON  # 使用自定义的 JSON 输出
+
+outputFormats:
+  randomJSON:
+    mediaType: "application/json"
+    baseName: "random"
+    isPlainText: true
+    notAlternative: true
+    noUgly: true
+    path: "/"

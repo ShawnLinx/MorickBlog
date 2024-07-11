@@ -1,0 +1,194 @@
+<script src="https://cdn.staticfile.org/twikoo/1.6.34/twikoo.all.min.js"></script>
+<div class="comment">
+  <div class="title--comment no-copy">
+      <h2>
+        <span class="icon">
+          {{ partial "helper/icon" "chat" }}
+        </span>
+        <span class="name">评论</span>
+      </h2>
+  </div>
+<div id="tcomment"></div>
+</div>
+<style>
+  .comment {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: var(--card-background);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--shadow-l1);
+    padding: var(--card-padding);
+  }
+  .title--comment {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .title--comment h2 {
+    margin: 0;
+    color: var(--main-color);
+    height: 50px;
+    display: flex;
+    align-items: center;
+  }
+  .icon,
+  .name {
+    line-height: 1;
+  }
+  .name {
+    margin-left: 5px;
+  }
+  .icon svg {
+    vertical-align: middle;
+    height: 1em;
+  }
+  :root {
+    --twikoo-body-text-color-main: rgba(0, 0, 0, 0.9);
+    --twikoo-body-text-color: rgba(0, 0, 0, 0.7);
+  }
+  :root[data-scheme="dark"] {
+    --twikoo-body-text-color-main: rgba(255, 255, 255, 0.9);
+    --twikoo-body-text-color: rgba(255, 255, 255, 0.7);
+  }
+  a.tk-submit-action-icon {
+    display: none;
+  }
+  .tk-submit-action-icon {
+    color: var(--body-text-color);
+  }
+  .tk-avatar {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  .tk-avatar img {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  .tk-replies .tk-clickable {
+    width: 25px !important;
+    height: 25px !important;
+  }
+  .tk-replies .tk-clickable img {
+    width: 25px !important;
+    height: 25px !important;
+  }
+  .twikoo .el-input-group__prepend,
+  .twikoo .tk-time,
+  .twikoo .tk-comments-no,
+  .twikoo .tk-comments-count {
+    color: var(--twikoo-body-text-color);
+  }
+  .twikoo .tk-nick {
+    color: var(--main-color);
+    font-size: 20px;
+  }
+  .twikoo .tk-action-icon {
+    color: var(--main-color);
+  }
+  .tk-master .tk-nick {
+    font-size: 15px;
+  }
+
+  .twikoo .el-input__inner,
+  .twikoo .el-textarea__inner,
+  .twikoo .tk-preview-container,
+  .twikoo .tk-content,
+  .twikoo .tk-send {
+    color: var(--twikoo-body-text-color-main);
+  }
+  .twikoo .tk-preview {
+    color: var(--twikoo-body-text-color-main) !important;
+  }
+  .twikoo .el-input__count {
+    color: var(--twikoo-body-text-color) !important;
+  }
+  .OwO .OwO-body {
+    background-color: var(--body-background) !important;
+    color: var(--body-text-color) !important;
+  }
+  .twikoo input,
+  .twikoo input:focus {
+    border: 1px solid rgba(144, 147, 153, 0.31) !important;
+  }
+  
+  textarea:focus {
+    border: 2px solid var(--main-color) !important; 
+  }
+  
+  .twikoo .tk-send {
+    background-color: var(--main-color) !important;
+    color: #fff !important;
+    border: none !important;
+  }
+  .tk-expand {
+    color: var(--body-text-color);
+  }
+</style>
+
+{{- with .Site.Params.comments.twikoo -}}
+<script>
+  twikoo.init({
+    envId: "{{- .envId -}}",
+    el: "#tcomment",
+  });
+</script>
+{{- end -}}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // 提示信息的内容
+    var hints = {
+      nick: "输入QQ号会获取头像、昵称和QQ邮箱",
+      mail: "当评论收到回复，会邮箱通知你",
+      link: "你的网站，非必填",
+    };
+
+    Object.keys(hints).forEach(function (name) {
+      var inputElement = document.querySelector(
+        '.el-input__inner[name="' + name + '"]'
+      );
+
+      inputElement.addEventListener("focus", function () {
+        createOrUpdateHint(inputElement, hints[name]);
+      });
+
+      inputElement.addEventListener("blur", function () {
+        removeHint();
+      });
+    });
+
+    function createOrUpdateHint(inputElement, hintText) {
+      // 移除已存在的提示，以避免重复
+      removeHint();
+
+      // 创建新的提示元素
+      var hint = document.createElement("div");
+      hint.setAttribute("id", "customHint");
+      hint.style.color = "#fff";
+      hint.style.backgroundColor = "#444444";
+      hint.style.fontSize = "13px";
+      hint.style.padding = "8px";
+      hint.style.position = "absolute";
+      hint.style.borderRadius = "var(--card-border-radius)";
+      hint.style.bottom = "100%"; // 使其显示在输入框上方
+      hint.style.left = "50%";
+      hint.style.width = "max-content";
+      hint.style.transform = "translateX(-50%)";
+      hint.style.marginBottom = "10px";
+      hint.style.boxShadow = "var(--shadow-l1)";
+      hint.style.pointerEvents = "none";
+      hint.textContent = hintText;
+
+      // 将提示元素添加到输入框的父元素中
+      inputElement.parentNode.insertBefore(hint, inputElement);
+    }
+
+    function removeHint() {
+      var hint = document.querySelector("#customHint");
+      if (hint) {
+        hint.remove();
+      }
+    }
+  });
+</script>

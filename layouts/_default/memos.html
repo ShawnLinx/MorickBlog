@@ -1,0 +1,102 @@
+{{ define "body-class" }}template-about{{ end }} {{ define "main" }} {{ partial
+"banner" . }}
+<div id="memos"></div>
+<div class="limit">
+  - 只显示最近30条 -
+</div>
+{{- with .Site.Params.memos -}}
+<script>
+  if (1) {
+    let url = "{{- .url -}}";
+    let limit = "{{- .limit -}}";
+    fetch(url + "/api/v1/memo?creatorId=1&limit=" + limit)
+      .then((res) => res.json())
+      .then((data) => {
+        // 注意修改域名和用户id
+        let items = [],
+          html = "";
+        data.forEach((item) => {
+          items.push(Format(item));
+        });
+        if (items.length == 30)
+          document.querySelector(".limit").style.display = "block";
+        items.forEach((item) => {
+          html += `
+            <div class="memos_item">
+              <div class="memos_content">${item.content}</div>
+              <div class="memos_bottom">
+                <div>
+                  <span class="memos_date">${item.date}</span>
+                </div>
+                <a title="评论" href="${url}/m/${item.name}" target="_blank">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z"/>
+                    <path d="M8.82388455,18.5880577 L4,21 L4.65322944,16.4273939 C3.00629211,15.0013 2,13.0946628 2,11 C2,6.581722 6.4771525,3 12,3 C17.5228475,3 22,6.581722 22,11 C22,15.418278 17.5228475,19 12,19 C10.8897425,19 9.82174472,18.8552518 8.82388455,18.5880577 Z"/>
+                  </svg>
+                </a>
+                </div>
+              </div>`; // 注意修改头像链接和名称
+        });
+        document.getElementById("memos").innerHTML = html;
+      });
+    // 页面内容格式化
+    function Format(item) {
+      let date = getTime(new Date(item.createdTs * 1000).toString()),
+        name = item.name,
+        content = item.content,
+        imgs = content.match(/!\[.*\]\(.*?\)/g),
+        text = "";
+
+      if (item.resourceList.length) {
+        if (!imgs) imgs = [];
+        item.resourceList.forEach((t) => {
+          if (t.externalLink) imgs.push(t.externalLink);
+          else imgs.push(`${url}/o/r/${t.uid}`);
+        });
+      }
+      
+      content = content.replace(/\[(.*?)\]\((.*?)\)/g, '<a class="memos_link" href="$2">$1</a>');
+      if (imgs) {
+        content += `<div class="zone_imgbox">`;
+        imgs.forEach(
+          (e) =>
+            (content += `
+            <a href="${e}" data-fancybox="gallery" class="fancybox" data-thumb="${e}" target="_blank">
+                <img class="no-lazyload" src="${e}">
+            </a>
+            `)
+        );
+        content += "</div>";
+      }
+      return {
+        content: content,
+        date: date,
+        name: name,
+        text: text.replace(/\[(.*?)\]\((.*?)\)/g),
+      };
+    }
+    // 页面时间格式化
+    function getTime(time) {
+      let d = new Date(time),
+        ls = [
+          d.getFullYear(),
+          d.getMonth() + 1,
+          d.getDate(),
+          d.getHours(),
+          d.getMinutes(),
+          d.getSeconds(),
+        ];
+      for (let i = 0; i < ls.length; i++) {
+        ls[i] = ls[i] <= 9 ? "0" + ls[i] : ls[i] + "";
+      }
+      if (new Date().getFullYear() == ls[0])
+        return ls[1] + "月" + ls[2] + "日 " + ls[3] + ":" + ls[4];
+      else
+        return (
+          ls[0] + "年" + ls[1] + "月" + ls[2] + "日 " + ls[3] + ":" + ls[4]
+        );
+    }
+  }
+</script>
+{{ end }}
+{{ end }}

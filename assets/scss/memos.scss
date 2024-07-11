@@ -1,0 +1,92 @@
+#memos {
+  @include respond(md) {
+    column-count: 3;  /* 根据需求调整列数 */
+  }
+  column-gap: 15px; /* 调整列之间的间隙 */
+  .memos_item {
+    break-inside: avoid;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-l1);
+    margin-bottom: 15px;
+    background-color: var(--card-background);
+    padding: var(--card-padding);
+    border-radius: var(--card-border-radius);
+    border: 1px solid transparent;
+    &:hover {
+      border-color: var(--main-color);
+    }
+  }
+}
+
+.memos_bottom {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  line-height: 1.5;
+}
+.memos_bottom {
+  justify-content: space-between;
+}
+
+span.memos_date {
+  color: var(--card-text-color-main);
+  opacity: 0.6;
+}
+
+.memos_content {
+  color: var(--card-text-color-main);
+  line-height: 1.5;
+}
+.zone_imgbox {
+  display: flex;
+  flex-wrap: wrap;
+  --w: calc(25% - 8px);
+  gap: 10px;
+  margin-top: 5px;
+}
+.zone_imgbox a {
+  display: block;
+  border-radius: 12px;
+  width: var(--w);
+  aspect-ratio: 1/1;
+  position: relative;
+}
+
+.zone_imgbox img {
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+  object-fit: cover;
+}
+/* 底部 */
+
+.memos_bottom {
+  opacity: 0.9;
+  margin-top: 10px;
+}
+
+.memos_bottom .icon:hover {
+  color: #49b1f5;
+}
+
+.memos_content > a {
+  color: var(--main-color) !important;
+  &:hover {
+    text-decoration: none !important;
+    font-weight: bold;
+  }
+}
+
+/* 提醒 */
+
+.limit {
+  text-align: center;
+  color: var(--card-text-color-main);
+  transition: all 0.3s ease-in-out;
+  color: var(--card-text-color-main);
+  a {
+    color: var(--card-text-color-secondary);
+    font-size: 15px;
+  }
+}
